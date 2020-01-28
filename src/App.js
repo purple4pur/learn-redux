@@ -8,7 +8,7 @@ export default class App extends Component {
   render() {
     return (
       <>
-        <CartList {...this.props.store.getState()} />
+        <CartList {...this.props.store} />
       </>
     )
   }

@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import { increment, decrement } from '../../actions/cart'
+
 export default class CartList extends Component {
   constructor(props) {
     super(props)
@@ -7,16 +9,21 @@ export default class CartList extends Component {
     this.state = {
       cart: []
     }
+    this.getState = this.getState.bind(this)
   }
 
-  componentDidMount() {
+  getState() {
     this.setState({
-      cart: this.props.cart
+      cart: this.props.getState().cart
     })
   }
 
+  componentDidMount() {
+    this.getState()
+    this.props.subscribe(this.getState)
+  }
+
   render() {
-    console.log(this.state.cart)
     return (
       <table>
         <thead>
@@ -37,9 +44,13 @@ export default class CartList extends Component {
                   <td>{item.title}</td>
                   <td>{item.price}</td>
                   <td>
-                    <button>-</button>
+                    <button onClick={() => {
+                      this.props.dispatch(decrement(item.id))
+                    }}>-</button>
                     <span>{item.amount}</span>
-                    <button>+</button>
+                    <button onClick={() => {
+                      this.props.dispatch(increment(item.id))
+                    }}>+</button>
                   </td>
                   <td></td>
                 </tr>
